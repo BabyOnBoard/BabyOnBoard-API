@@ -8,3 +8,12 @@ class Temperature(models.Model):
 
     def __str__(self):
         return str(self.temperature)
+
+
+class HeartBeats(models.Model):
+    beats = models.PositiveIntegerField()
+    date = models.DateField(auto_now=True, auto_now_add=False)
+    time = models.TimeField(auto_now=True, auto_now_add=False)
+
+    def __str__(self):
+        return str(self.beats)
