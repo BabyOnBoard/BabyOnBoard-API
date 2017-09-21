@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from .models import Temperature, HeartBeats
+from .models import Temperature, HeartBeats, Breathing
 from .utils import jsonify
 
 
@@ -14,5 +14,11 @@ def temperature_now(request):
 def heartbeats_now(request):
     heartbeats = HeartBeats.objects.order_by('date', 'time').last()
     content = jsonify(heartbeats)
+
+    return HttpResponse(content, JSON_CONTENT)
+
+def breathing_now(request):
+    breathing = Breathing.objects.order_by('date', 'time').last()
+    content = jsonify(breathing)
 
     return HttpResponse(content, JSON_CONTENT)
