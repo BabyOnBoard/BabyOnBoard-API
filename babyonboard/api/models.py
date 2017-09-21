@@ -17,3 +17,12 @@ class HeartBeats(models.Model):
 
     def __str__(self):
         return str(self.beats)
+
+
+class Breathing(models.Model):
+    is_breathing = models.BooleanField()
+    date = models.DateField(auto_now=True, auto_now_add=False)
+    time = models.TimeField(auto_now=True, auto_now_add=False)
+
+    def __str__(self):
+        return str(self.is_breathing)
