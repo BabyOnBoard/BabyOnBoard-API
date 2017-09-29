@@ -4,7 +4,11 @@ import json
 
 JSON = 'json'
 
+
 def jsonify(model):
+    if model is None:
+        return json.dumps({})
+
     serialized = serializers.serialize(JSON, [model])
     aux_json = json.loads(serialized)
 
