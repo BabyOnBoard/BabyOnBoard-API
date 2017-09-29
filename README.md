@@ -1,6 +1,90 @@
  # BabyOnBoard-API
 
-### Heartbeat Sensor to Api comunication
+## API to clients comunication
+
+The endpoints will return JSON responses by default, being also capable of rendering web interfaces automatically generated through DJANGORESTFRAMEWORK.
+
+### Heartbeat
+
+- ###### GET
+
+  ##### Returns the last hearbeat info inserted into database (sorted by date, single object)
+
+  ````json
+  {
+    "pk": 2, 
+    "fields": 
+    {
+      "beats": 60, 
+      "date": "2017-09-22", 
+      "time": "15:01:42.632"
+    }
+  }
+  ````
+
+- ###### POST - WIP
+
+### Temperature
+
+- ###### GET
+
+  Returns the last temperature info inserted into database (sorted by date, single object)
+
+  ```json
+  {
+    "pk": 212, 
+    "fields": 
+    {
+      "beats": 94, 
+      "date": "2017-09-22", 
+      "time": "15:01:42.632"
+    }
+  }
+  ```
+
+- ###### POST - WIP
+
+### Breathing
+
+* ###### GET
+
+  Returns the last breathing info inserted into database (sorted by date, single object)
+
+  ```json
+  {
+    "pk": 122, 
+    "fields": 
+    {
+      "temperature": 32, 
+      "date": "2017-09-22", 
+      "time": "15:01:42.632"
+    }
+  }
+  ```
+
+* ###### POST - WIP
+
+### Movement
+
+* ###### GET
+
+  Returns the last movement info inserted into database (sorted by date, single object)
+
+  ```json
+  {
+    "pk": 2, 
+    "fields": 
+    {
+      "movement": "resting", 
+      "date": "2017-09-22",
+      "time": "15:01:42.632"
+    }
+  }
+  ```
+
+* ###### POST - WIP
+
+## Sensor to API comunication
 
 Initially the sensor reading will be through TXT files that will be sent by the MSP to the Rasp.
 
@@ -30,7 +114,7 @@ The APi will parse the file into the local database and forward it to the client
 
 
 
-### Temperature Sensor to Api comunication
+### Temperature
 
 Initially the sensor reading will be through TXT files that will be sent by the MSP to the Rasp.
 
@@ -58,7 +142,7 @@ Expected JSON that comes from temperature sensor:
 
 The APi will parse the file into the local database and forward it to the clients throug a REST API
 
-### Breathing Sensor to Api comunication
+### Breathing
 
 Initially the sensor reading will be through TXT files that will be sent by the MSP to the Rasp.
 
@@ -85,3 +169,33 @@ Expected JSON that comes from breathing sensor:
 - timestamp - Unix timestamp
 
 The APi will parse the file into the local database and forward it to the clients throug a REST API
+
+### Movement 
+
+Initially the sensor reading will be through TXT files that will be sent by the MSP to the Rasp.
+
+Expected JSON that comes from breathing sensor:
+
+```json
+[
+    {
+      "type":1,
+      "timestamp":1234567898
+    },
+    {
+      "type":2,
+      "timestamp":1234567898
+    },
+    {
+      "type":3,
+      "timestamp":1234567898
+    }
+]
+```
+
+- temperature - Boolean value
+- timestamp - Unix timestamp
+
+The APi will parse the file into the local database and forward it to the clients throug a REST API
+
+### Sensor to API Comunication - WIP
