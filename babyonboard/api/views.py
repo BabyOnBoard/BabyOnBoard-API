@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from .models import Temperature, HeartBeats, Breathing, BabyCrib
 from .utils import jsonify
 from django.core import serializers
+import json
 
 
 JSON_CONTENT = 'application/json'
@@ -32,9 +33,9 @@ def breathing_now(request):
 
 def movement(request):
 
-    if request.POST:
+    if request.method == 'POST':
         return movement_set(request)
-    elif request.GET:
+    elif request.method == 'GET':
         return movement_now(request)
 
     return HttpResponse('', status=405, reason='Method not allowed, only GET or POST.')
@@ -43,6 +44,21 @@ def movement(request):
 # Private Methods
 
 def movement_set(request):
+    # parsing body to json
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    movement_type = body["type"]
+
+    duration = body["duration"]
+
+    if movement is "vertical":
+        print("Setting movement to - VERTICAL " + movement_type + " " + duration)
+    if movement is "horizontal":
+        print("Setting movement to - HORIZONTAL" + movement_type + " " + duration)
+    if movement is "vibrate":
+        print("Setting movement to - VIBRATE" + movement_type + " " + duration)
+
+
     # Make python code to summon a C executable or a shell script that does it
     return HttpResponse('', status=200)
 

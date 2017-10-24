@@ -6,5 +6,5 @@ urlpatterns = [
     url(r'^temperature/$', views.temperature_now, name='temperature_now'),
     url(r'^heartbeats/$', views.heartbeats_now, name='heartbeats_now'),
     url(r'^breathing/$', views.breathing_now, name='breathing_now'),
-    url(r'^movement/$', views.movement_now, name='movement'),
+    url(r'^movement/$', views.movement, name='movement'),
 ]
