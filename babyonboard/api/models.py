@@ -46,6 +46,7 @@ class BabyCrib(models.Model):
         choices=MOVEMENT_CHOICES,
         default=RESTING
     )
+
     duration = models.PositiveIntegerField()
     date = models.DateField(auto_now=True, auto_now_add=False)
     time = models.TimeField(auto_now=True, auto_now_add=False)

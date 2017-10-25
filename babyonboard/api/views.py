@@ -1,39 +1,32 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Temperature, HeartBeats, Breathing, BabyCrib
 from .utils import jsonify
 from .utils import runCScript
-from django.core import serializers
+from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer
 import json
 
 
-JSON_CONTENT = 'application/json'
-
 def temperature_now(request):
     temperature = Temperature.objects.order_by('date', 'time').last()
-    temperature = [temperature, ]
-    # content = jsonify(temperature)
-    # serialize queryset
-    if temperature is None:
-        temperature = []
-    serialized_queryset = serializers.serialize('json', temperature)
-
-    # serialize object
-    return HttpResponse(serialized_queryset, JSON_CONTENT)
+    serializer = TemperatureSerializer(temperature)
+    return JsonResponse(serializer.data)
 
 def heartbeats_now(request):
     heartbeats = HeartBeats.objects.order_by('date', 'time').last()
-    content = jsonify(heartbeats)
-
-    return HttpResponse(content, JSON_CONTENT)
+    serializer = HeartBeatsSerializer(heartbeats)
+    return JsonResponse(serializer.data)
 
 def breathing_now(request):
     breathing = Breathing.objects.order_by('date', 'time').last()
-    content = jsonify(breathing)
+    serializer = BreathingSerializer(breathing)
+    return JsonResponse(serializer.data)
 
-    return HttpResponse(content, JSON_CONTENT)
+def movement_now(request):
+    babycrib = BabyCrib.objects.order_by('date', 'time').last()
+    serializer = BabyCribSerializer(babycrib)
+    return JsonResponse(serializer.data)
 
 def movement(request):
-
     if request.method == 'POST':
         return movement_set(request)
     elif request.method == 'GET':
@@ -66,9 +59,3 @@ def movement_set(request):
 
     # Make python code to summon a C executable or a shell script that does it
     return HttpResponse('', status=200)
-
-
-def movement_now(request):
-    babycrib = BabyCrib.objects.order_by('date', 'time').last()
-    content = jsonify(babycrib)
-    return HttpResponse(content, JSON_CONTENT)
