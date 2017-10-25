@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from .models import Temperature, HeartBeats, Breathing, BabyCrib
 from .utils import jsonify
+from .utils import runCScript
 from django.core import serializers
 import json
 
@@ -45,6 +46,7 @@ def movement(request):
 
 def movement_set(request):
     # parsing body to json
+
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     movement_type = body["type"]
@@ -52,10 +54,13 @@ def movement_set(request):
     duration = body["duration"]
 
     if movement is "vertical":
+        runCScript(movement_type)
         print("Setting movement to - VERTICAL " + movement_type + " " + duration)
     if movement is "horizontal":
+        runCScript(movement_type)
         print("Setting movement to - HORIZONTAL" + movement_type + " " + duration)
     if movement is "vibrate":
+        runCScript(movement_type)
         print("Setting movement to - VIBRATE" + movement_type + " " + duration)
 
 
