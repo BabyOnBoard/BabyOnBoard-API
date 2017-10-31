@@ -1,9 +1,10 @@
+import json
+import os
 from django.http import HttpResponse, JsonResponse
 from .models import Temperature, HeartBeats, Breathing, BabyCrib
 from .utils import jsonify
 from .utils import runCScript
 from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer
-import json
 
 
 # Temperatures endpoints
@@ -82,6 +83,17 @@ def movement(request):
 
     return HttpResponse('', status=405, reason='Method not allowed, only GET or POST.')
 
+
+# Streaming endpoint
+def streaming(request):
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        action = body["action"]
+        os.system("sudo service motion {}".format(action))
+        return HttpResponse('', status=200)
+
+    return HttpResponse('', status=405, reason='Method not allowed, only POST.')
 
 # Private Methods
 
