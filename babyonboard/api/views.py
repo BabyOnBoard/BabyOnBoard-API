@@ -90,7 +90,8 @@ def streaming(request):
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         action = body["action"]
-        os.system("sudo service motion {}".format(action))
+        script_path = os.path.abspath(__file__ + "/../scripts/motioncontrol.py")
+        os.system("python3 {} {}".format(script_path, action))
         return HttpResponse('', status=200)
 
     return HttpResponse('', status=405, reason='Method not allowed, only POST.')
