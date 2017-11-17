@@ -199,3 +199,28 @@ Expected JSON that comes from breathing sensor:
 The APi will parse the file into the local database and forward it to the clients throug a REST API
 
 ### Sensor to API Comunication - WIP
+
+----
+
+## Additional Configuration
+
+### Enabling ````motioncontrol.py```` to be executed as sudo without prompting password
+
+* Type ````sudo visudo```` at the terminal to open the sudo permissions (````sudoers````) file
+* Around line 25, you'll see this line: ````%sudo   ALL=(ALL:ALL) ALL````
+* **Below that line**, insert the following line, where ````username```` is your username:
+* ````username  ALL=(ALL) NOPASSWD: /path/to/BabyOnBoard-API/babyonboard/api/scripts/motioncontrol.py````
+* Exit the editor (Ctrl+X if nano)
+
+### Starting the Baby on Board application at startup
+
+Add the ````babyonboard.sh```` file to the crontab list:
+
+* Type in terminal:
+* ````$crontab -e````
+* Then add the following line in it:
+* ````@reboot /path/to/BabyOnBoard-API/babyonboard.sh virtualenv portnumber````
+
+````virtualenv```` is the path to your virtualenv /bin/activate
+
+````portnumber```` is the port that you want the application to be run

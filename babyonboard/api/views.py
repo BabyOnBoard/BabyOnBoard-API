@@ -1,14 +1,24 @@
+import json
+import os
+from random import choice
 from django.http import HttpResponse, JsonResponse
 from .models import Temperature, HeartBeats, Breathing, BabyCrib
 from .utils import jsonify
 from .utils import runCScript
 from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer
-import json
 
 
 # Temperatures endpoints
 def temperature_now(request):
-    temperature = Temperature.objects.order_by('date', 'time').last()
+    temps = []
+    x = 35.9
+    y = 0.1
+    for t in range(0, 30):
+        x += y
+        temps.append(round(x, 1))
+    temperature = Temperature(temperature=choice(temps))
+    temperature.save()
+    # temperature = Temperature.objects.order_by('date', 'time').last()
     serializer = TemperatureSerializer(temperature)
     return JsonResponse(serializer.data)
 
@@ -29,7 +39,12 @@ def temperature_day_archive(request, year, month, day):
 
 # Heartbeats endpoints
 def heartbeats_now(request):
-    heartbeats = HeartBeats.objects.order_by('date', 'time').last()
+    beats = []
+    for b in range(50, 101):
+        beats.append(b)
+    heartbeats = HeartBeats(beats=choice(beats))
+    heartbeats.save()
+    # heartbeats = HeartBeats.objects.order_by('date', 'time').last()
     serializer = HeartBeatsSerializer(heartbeats)
     return JsonResponse(serializer.data)
 
@@ -50,7 +65,10 @@ def heartbeats_day_archive(request, year, month, day):
 
 # Breathing endpoints
 def breathing_now(request):
-    breathing = Breathing.objects.order_by('date', 'time').last()
+    breathings = [True, False]
+    breathing = Breathing(is_breathing=choice(breathings))
+    breathing.save()
+    # breathing = Breathing.objects.order_by('date', 'time').last()
     serializer = BreathingSerializer(breathing)
     return JsonResponse(serializer.data)
 
@@ -82,6 +100,18 @@ def movement(request):
 
     return HttpResponse('', status=405, reason='Method not allowed, only GET or POST.')
 
+
+# Streaming endpoint
+def streaming(request):
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        action = body["action"]
+        script_path = os.path.abspath(__file__ + "/../scripts/motioncontrol.py")
+        os.system("python3 {} {}".format(script_path, action))
+        return HttpResponse('', status=200)
+
+    return HttpResponse('', status=405, reason='Method not allowed, only POST.')
 
 # Private Methods
 
