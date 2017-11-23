@@ -32,16 +32,24 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
-INSTALLED_APPS = [
+DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+THIRD_PART_APPS = [
     'rest_framework',
+]
+
+LOCAL_APPS = [
     'api',
 ]
+
+INSTALLED_APPS = LOCAL_APPS + THIRD_PART_APPS + DEFAULT_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
