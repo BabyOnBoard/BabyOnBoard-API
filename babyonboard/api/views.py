@@ -1,6 +1,6 @@
 import json
 import os
-from subprocess import call
+from subprocess import Popen
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -115,7 +115,7 @@ def movement(request):
         return Response(serializer.data)
     if request.method == 'POST':
         movement = request.data.get('movimento')
-        if movement == 1 or movement == 2:
+        if movement == 1 or movement == 2 or movement == 3:
             data = {
                 'status': get_movement_name(movement),
                 'duration': 0
@@ -123,20 +123,10 @@ def movement(request):
             serializer = BabyCribSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
-                # os.system("./../scripts/movimento {}".format(movement))
-                call(['./../scripts/movimento', str(movement)])
+                script_path = os.path.abspath(__file__ + '/../scripts/movimento')
+                Popen([script_path, str(movement)])
                 return Response(data=None, status=status.HTTP_200_OK)
         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
-        # data = {
-        #     'status': request.data.get('status'),
-        #     'duration': request.data.get('duration')
-        # }
-        # serializer = BabyCribSerializer(data=data)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     runCScript(data['status'], data['duration'])
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Streaming endpoint
 @api_view(['POST'])
@@ -170,3 +160,5 @@ def get_movement_name(id):
         return 'side'
     elif id == 2:
         return 'front'
+    elif id == 3:
+        return 'vibration'
