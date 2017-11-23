@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..models import Temperature, HeartBeats, Breathing
+from ..models import Temperature, HeartBeats, Breathing, BabyCrib
 
 
 class TemperatureTest(TestCase):
@@ -39,3 +39,16 @@ class BreathingTest(TestCase):
         self.assertIsNotNone(breathing)
         self.assertTrue(isinstance(breathing, Breathing))
         self.assertEqual(breathing.__str__(), str(breathing.is_breathing))
+
+
+class BabyCribTest(TestCase):
+    """Test class for babycrib model"""
+
+    def setUp(self):
+        BabyCrib.objects.create(status='resting', duration=0)
+
+    def test_create_breathing(self):
+        babycrib = BabyCrib.objects.get(status='resting')
+        self.assertIsNotNone(babycrib)
+        self.assertTrue(isinstance(babycrib, BabyCrib))
+        self.assertEqual(babycrib.__str__(), str(babycrib.status))
