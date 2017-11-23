@@ -10,15 +10,7 @@ from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingS
 
 # Temperatures endpoints
 def temperature_now(request):
-    temps = []
-    x = 35.9
-    y = 0.1
-    for t in range(0, 30):
-        x += y
-        temps.append(round(x, 1))
-    temperature = Temperature(temperature=choice(temps))
-    temperature.save()
-    # temperature = Temperature.objects.order_by('date', 'time').last()
+    temperature = Temperature.objects.order_by('date', 'time').last()
     serializer = TemperatureSerializer(temperature)
     return JsonResponse(serializer.data)
 
@@ -39,12 +31,7 @@ def temperature_day_archive(request, year, month, day):
 
 # Heartbeats endpoints
 def heartbeats_now(request):
-    beats = []
-    for b in range(50, 101):
-        beats.append(b)
-    heartbeats = HeartBeats(beats=choice(beats))
-    heartbeats.save()
-    # heartbeats = HeartBeats.objects.order_by('date', 'time').last()
+    heartbeats = HeartBeats.objects.order_by('date', 'time').last()
     serializer = HeartBeatsSerializer(heartbeats)
     return JsonResponse(serializer.data)
 
@@ -65,10 +52,7 @@ def heartbeats_day_archive(request, year, month, day):
 
 # Breathing endpoints
 def breathing_now(request):
-    breathings = [True, False]
-    breathing = Breathing(is_breathing=choice(breathings))
-    breathing.save()
-    # breathing = Breathing.objects.order_by('date', 'time').last()
+    breathing = Breathing.objects.order_by('date', 'time').last()
     serializer = BreathingSerializer(breathing)
     return JsonResponse(serializer.data)
 
@@ -100,7 +84,6 @@ def movement(request):
 
     return HttpResponse('', status=405, reason='Method not allowed, only GET or POST.')
 
-
 # Streaming endpoint
 def streaming(request):
     if request.method == 'POST':
@@ -117,11 +100,9 @@ def streaming(request):
 
 def movement_set(request):
     # parsing body to json
-
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     movement_type = body["type"]
-
     duration = body["duration"]
 
     if movement is "vertical":
@@ -133,7 +114,6 @@ def movement_set(request):
     if movement is "vibrate":
         runCScript(movement_type)
         print("Setting movement to - VIBRATE" + movement_type + " " + duration)
-
 
     # Make python code to summon a C executable or a shell script that does it
     return HttpResponse('', status=200)
