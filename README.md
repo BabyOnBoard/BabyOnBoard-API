@@ -1,4 +1,6 @@
- # BabyOnBoard-API
+# BabyOnBoard-API
+
+![Build Status](https://travis-ci.org/BabyOnBoard/BabyOnBoard-API.svg?branch=master)
 
 ## API to clients comunication
 
