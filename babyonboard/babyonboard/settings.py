@@ -45,6 +45,10 @@ THIRD_PART_APPS = [
     'rest_framework',
 ]
 
+REST_FRAMEWORK = {
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+}
+
 LOCAL_APPS = [
     'api',
 ]
