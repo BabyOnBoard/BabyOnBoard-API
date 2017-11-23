@@ -47,7 +47,7 @@ class BabyCribTest(TestCase):
     def setUp(self):
         BabyCrib.objects.create(status='resting', duration=0)
 
-    def test_create_breathing(self):
+    def test_create_babycrib(self):
         babycrib = BabyCrib.objects.get(status='resting')
         self.assertIsNotNone(babycrib)
         self.assertTrue(isinstance(babycrib, BabyCrib))

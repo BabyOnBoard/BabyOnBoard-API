@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^temperature/$', views.temperature_now, name='temperature_now'),
+    url(r'^temperature/$', views.temperature, name='temperature'),
     url(r'^temperature/(?P<year>[0-9]{4})/$', views.temperature_year_archive),
     url(r'^temperature/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$', views.temperature_month_archive),
     url(r'^temperature/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/$', views.temperature_day_archive),

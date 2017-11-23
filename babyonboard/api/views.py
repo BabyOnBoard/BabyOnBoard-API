@@ -1,18 +1,30 @@
 import json
 import os
-from random import choice
 from django.http import HttpResponse, JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Temperature, HeartBeats, Breathing, BabyCrib
-from .utils import jsonify
 from .utils import runCScript
 from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer
 
 
-# Temperatures endpoints
-def temperature_now(request):
-    temperature = Temperature.objects.order_by('date', 'time').last()
-    serializer = TemperatureSerializer(temperature)
-    return JsonResponse(serializer.data)
+# Temperature endpoints
+@api_view(['GET', 'POST'])
+def temperature(request):
+    if request.method == 'GET':
+        temperature = Temperature.objects.order_by('date', 'time').last()
+        serializer = TemperatureSerializer(temperature)
+        return Response(serializer.data)
+    if request.method == 'POST':
+        data = {
+            'temperature': request.data.get('temperature')
+        }
+        serializer = TemperatureSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def temperature_year_archive(request, year):
     temperatures = Temperature.objects.filter(date__year=year)
