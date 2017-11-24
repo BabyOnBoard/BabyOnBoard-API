@@ -2,8 +2,8 @@ import json
 from rest_framework import status
 from django.test import TestCase, Client
 from django.urls import reverse
-from ..models import Temperature
-from ..serializers import TemperatureSerializer
+from ..models import Temperature, HeartBeats
+from ..serializers import TemperatureSerializer, HeartBeatsSerializer
 
 
 client = Client()
@@ -46,6 +46,48 @@ class CreateNewTemperatureTest(TestCase):
     def test_create_invalid_temperature(self):
         response = client.post(
             reverse('temperature'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class GetCurrentHeartBeatsTest(TestCase):
+    """ Test class for GET current heartbeats from API """
+
+    def setUp(self):
+        HeartBeats.objects.create(beats=70)
+
+    def test_get_current_heartbeats(self):
+        response = client.get(reverse('heartbeats'))
+        heartbeats = HeartBeats.objects.order_by('date', 'time').last()
+        serializer = HeartBeatsSerializer(heartbeats)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CreateNewHeartBeatsTest(TestCase):
+    """" Test class for saving a new heartbeats registry """
+
+    def setUp(self):
+        self.valid_payload = {
+            'beats': 80
+        }
+        self.invalid_payload = {
+            'beats': ''
+        }
+
+    def test_create_valid_heartbeats(self):
+        response = client.post(
+            reverse('heartbeats'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_invalid_temperature(self):
+        response = client.post(
+            reverse('heartbeats'),
             data=json.dumps(self.invalid_payload),
             content_type='application/json'
         )
