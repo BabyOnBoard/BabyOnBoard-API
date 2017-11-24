@@ -2,8 +2,8 @@ import json
 from rest_framework import status
 from django.test import TestCase, Client
 from django.urls import reverse
-from ..models import Temperature, HeartBeats
-from ..serializers import TemperatureSerializer, HeartBeatsSerializer
+from ..models import Temperature, HeartBeats, Breathing
+from ..serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer
 
 
 client = Client()
@@ -88,6 +88,48 @@ class CreateNewHeartBeatsTest(TestCase):
     def test_create_invalid_temperature(self):
         response = client.post(
             reverse('heartbeats'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class GetCurrentBreathingTest(TestCase):
+    """ Test class for GET current breathing from API """
+
+    def setUp(self):
+        Breathing.objects.create(is_breathing=True)
+
+    def test_get_current_breathing(self):
+        response = client.get(reverse('breathing'))
+        breathing = Breathing.objects.order_by('date', 'time').last()
+        serializer = BreathingSerializer(breathing)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CreateNewBreathingTest(TestCase):
+    """" Test class for saving a new breathing registry """
+
+    def setUp(self):
+        self.valid_payload = {
+            'is_breathing': True
+        }
+        self.invalid_payload = {
+            'is_breathing': ''
+        }
+
+    def test_create_valid_breathing(self):
+        response = client.post(
+            reverse('breathing'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_invalid_breathing(self):
+        response = client.post(
+            reverse('breathing'),
             data=json.dumps(self.invalid_payload),
             content_type='application/json'
         )
