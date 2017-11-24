@@ -42,10 +42,21 @@ def temperature_day_archive(request, year, month, day):
     return JsonResponse(serializer.data, safe=False)
 
 # Heartbeats endpoints
-def heartbeats_now(request):
-    heartbeats = HeartBeats.objects.order_by('date', 'time').last()
-    serializer = HeartBeatsSerializer(heartbeats)
-    return JsonResponse(serializer.data)
+@api_view(['GET', 'POST'])
+def heartbeats(request):
+    if request.method == 'GET':
+        heartbeats = HeartBeats.objects.order_by('date', 'time').last()
+        serializer = HeartBeatsSerializer(heartbeats)
+        return Response(serializer.data)
+    if request.method == 'POST':
+        data = {
+            'beats': request.data.get('beats')
+        }
+        serializer = HeartBeatsSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def heartbeats_year_archive(request, year):
     heartbeats = HeartBeats.objects.filter(date__year=year)

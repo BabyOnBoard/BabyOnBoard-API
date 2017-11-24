@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^temperature/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$', views.temperature_month_archive),
     url(r'^temperature/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/$', views.temperature_day_archive),
 
-    url(r'^heartbeats/$', views.heartbeats_now, name='heartbeats_now'),
+    url(r'^heartbeats/$', views.heartbeats, name='heartbeats'),
     url(r'^heartbeats/(?P<year>[0-9]{4})/$', views.heartbeats_year_archive),
     url(r'^heartbeats/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$', views.heartbeats_month_archive),
     url(r'^heartbeats/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/$', views.heartbeats_day_archive),
