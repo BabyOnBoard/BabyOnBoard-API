@@ -2,8 +2,8 @@ import json
 from rest_framework import status
 from django.test import TestCase, Client
 from django.urls import reverse
-from ..models import Temperature, HeartBeats, Breathing
-from ..serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer
+from ..models import Temperature, HeartBeats, Breathing, BabyCrib
+from ..serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer
 
 
 client = Client()
@@ -158,6 +158,50 @@ class ControlStreamingTest(TestCase):
     def test_invalid_streaming_control(self):
         response = client.post(
             reverse('streaming'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class GetBabyCribStatusTest(TestCase):
+    """ Test class to check babycrib status """
+
+    def setUp(self):
+        BabyCrib.objects.create(status='resting', duration=0)
+
+    def test_get_babycrib_status(self):
+        response = client.get(reverse('movement'))
+        babycrib = BabyCrib.objects.order_by('date', 'time').last()
+        serializer = BabyCribSerializer(babycrib)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class ControlBabyCribMovement(TestCase):
+    """ Test class for controling babycrib movementation """
+
+    def setUp(self):
+        self.valid_payload = {
+            'status': 'resting',
+            'duration': '0'
+        }
+        self.invalid_payload = {
+            'status': 'stop',
+            'duration': 100
+        }
+
+    def test_set_movement(self):
+        response = client.post(
+            reverse('movement'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_set_invalid_movement(self):
+        response = client.post(
+            reverse('movement'),
             data=json.dumps(self.invalid_payload),
             content_type='application/json'
         )
