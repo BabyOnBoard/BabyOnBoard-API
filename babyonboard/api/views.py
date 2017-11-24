@@ -74,10 +74,21 @@ def heartbeats_day_archive(request, year, month, day):
     return JsonResponse(serializer.data, safe=False)
 
 # Breathing endpoints
-def breathing_now(request):
-    breathing = Breathing.objects.order_by('date', 'time').last()
-    serializer = BreathingSerializer(breathing)
-    return JsonResponse(serializer.data)
+@api_view(['GET', 'POST'])
+def breathing(request):
+    if request.method == 'GET':
+        breathing = Breathing.objects.order_by('date', 'time').last()
+        serializer = BreathingSerializer(breathing)
+        return Response(serializer.data)
+    if request.method == 'POST':
+        data = {
+            'is_breathing': request.data.get('is_breathing')
+        }
+        serializer = BreathingSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def breathing_year_archive(request, year):
     breathings = Breathing.objects.filter(date__year=year)
