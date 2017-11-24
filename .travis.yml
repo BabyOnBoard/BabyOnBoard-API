@@ -7,8 +7,13 @@ install:
   - pip install -r requirements.txt
 
 before_script:
-  - python babyonboard/manage.py makemigrations
-  - python babyonboard/manage.py migrate
+  - cd babyonboard/
+  - python manage.py makemigrations
+  - python manage.py migrate
 
 script:
-  - python babyonboard/manage.py test api
+  - coverage run manage.py test
+  - coverage report
+
+after_success:
+  - coveralls
