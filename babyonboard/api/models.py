@@ -69,3 +69,16 @@ class BabyCrib(models.Model):
 
     def __str__(self):
         return str(self.status)
+
+
+class Noise(models.Model):
+    """
+    Noise Model
+    Defines if the baby is crying or not
+    """
+    is_crying = models.BooleanField()
+    date = models.DateField(auto_now=True, auto_now_add=False)
+    time = models.TimeField(auto_now=True, auto_now_add=False)
+
+    def __str__(self):
+        return str(self.is_crying)

@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^movement/$', views.movement, name='movement'),
 
 	url(r'^streaming/$', views.streaming, name='streaming'),
+
+    url(r'^noise/$', views.noise, name='noise'),
 ]
