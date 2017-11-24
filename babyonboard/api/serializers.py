@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Temperature, HeartBeats, Breathing, BabyCrib
+from .models import Temperature, HeartBeats, Breathing, BabyCrib, Noise
 
 
 class TemperatureSerializer(serializers.ModelSerializer):
@@ -24,3 +24,9 @@ class BabyCribSerializer(serializers.ModelSerializer):
     class Meta:
         model = BabyCrib
         fields = ('id', 'status', 'duration', 'date', 'time')
+
+
+class NoiseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Noise
+        fields = ('id', 'is_crying', 'date', 'time')

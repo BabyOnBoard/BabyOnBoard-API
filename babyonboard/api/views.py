@@ -4,9 +4,9 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Temperature, HeartBeats, Breathing, BabyCrib
+from .models import Temperature, HeartBeats, Breathing, BabyCrib, Noise
 from .utils import runCScript
-from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer
+from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer, NoiseSerializer
 
 
 # Temperature endpoints
@@ -133,3 +133,20 @@ def streaming(request):
         os.system("python {} {}".format(script_path, action))
         return Response(data=None, status=status.HTTP_200_OK)
     return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
+
+# Noise endpoint
+@api_view(['GET', 'POST'])
+def noise(request):
+    if request.method == 'GET':
+        noise = Noise.objects.order_by('date', 'time').last()
+        serializer = NoiseSerializer(noise)
+        return Response(serializer.data)
+    if request.method == 'POST':
+        data = {
+            'is_crying': request.data.get('status')
+        }
+        serializer = NoiseSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
