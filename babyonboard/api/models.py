@@ -45,16 +45,16 @@ class BabyCrib(models.Model):
     BabyCrib Model
     Defines the atributes of the babycrib
     """
-    RESTING = 'Resting'
-    FRONT = 'Front'
-    SIDE = 'Side'
-    VIBRATION = 'Vibration'
+    RESTING = 'resting'
+    FRONT = 'front'
+    SIDE = 'side'
+    VIBRATION = 'vibration'
 
     MOVEMENT_CHOICES = (
-        (RESTING, 'resting'),
-        (FRONT, 'front'),
-        (SIDE, 'side'),
-        (VIBRATION, 'vibration'),
+        (RESTING, 'Resting'),
+        (FRONT, 'Front'),
+        (SIDE, 'Side'),
+        (VIBRATION, 'Vibration'),
     )
 
     status = models.CharField(

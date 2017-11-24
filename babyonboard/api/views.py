@@ -105,18 +105,24 @@ def breathing_day_archive(request, year, month, day):
     serializer = BreathingSerializer(breathings, many=True)
     return JsonResponse(serializer.data, safe=False)
 
-def movement_now(request):
-    babycrib = BabyCrib.objects.order_by('date', 'time').last()
-    serializer = BabyCribSerializer(babycrib)
-    return JsonResponse(serializer.data)
-
+# Movement endpoints
+@api_view(['GET', 'POST'])
 def movement(request):
+    if request.method == 'GET':
+        babycrib = BabyCrib.objects.order_by('date', 'time').last()
+        serializer = BabyCribSerializer(babycrib)
+        return Response(serializer.data)
     if request.method == 'POST':
-        return movement_set(request)
-    elif request.method == 'GET':
-        return movement_now(request)
-
-    return HttpResponse('', status=405, reason='Method not allowed, only GET or POST.')
+        data = {
+            'status': request.data.get('status'),
+            'duration': request.data.get('duration')
+        }
+        serializer = BabyCribSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            runCScript(data['status'], data['duration'])
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Streaming endpoint
 @api_view(['POST'])
@@ -127,25 +133,3 @@ def streaming(request):
         os.system("python {} {}".format(script_path, action))
         return Response(data=None, status=status.HTTP_200_OK)
     return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
-
-# Private Methods
-
-def movement_set(request):
-    # parsing body to json
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    movement_type = body["type"]
-    duration = body["duration"]
-
-    if movement is "vertical":
-        runCScript(movement_type)
-        print("Setting movement to - VERTICAL " + movement_type + " " + duration)
-    if movement is "horizontal":
-        runCScript(movement_type)
-        print("Setting movement to - HORIZONTAL" + movement_type + " " + duration)
-    if movement is "vibrate":
-        runCScript(movement_type)
-        print("Setting movement to - VIBRATE" + movement_type + " " + duration)
-
-    # Make python code to summon a C executable or a shell script that does it
-    return HttpResponse('', status=200)
