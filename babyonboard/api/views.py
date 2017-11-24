@@ -113,16 +113,28 @@ def movement(request):
         serializer = BabyCribSerializer(babycrib)
         return Response(serializer.data)
     if request.method == 'POST':
-        data = {
-            'status': request.data.get('status'),
-            'duration': request.data.get('duration')
-        }
-        serializer = BabyCribSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            runCScript(data['status'], data['duration'])
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        movement = request.data.get('movimento')
+        if movement == 1 or movement == 2:
+            data = {
+                'status': get_movement_name(movement),
+                'duration': 0
+            }
+            serializer = BabyCribSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                os.system("./../scripts/movimento {} &".format(movement))
+                return Response(data=None, status=status.HTTP_200_OK)
+        return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
+        # data = {
+        #     'status': request.data.get('status'),
+        #     'duration': request.data.get('duration')
+        # }
+        # serializer = BabyCribSerializer(data=data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     runCScript(data['status'], data['duration'])
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Streaming endpoint
 @api_view(['POST'])
@@ -150,3 +162,9 @@ def noise(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+def get_movement_name(id):
+    if id == 1:
+        return 'side'
+    elif id == 2:
+        return 'front'
