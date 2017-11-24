@@ -23,4 +23,4 @@ class BreathingSerializer(serializers.ModelSerializer):
 class BabyCribSerializer(serializers.ModelSerializer):
     class Meta:
         model = BabyCrib
-        fields = ('id', 'duration', 'date', 'time')
+        fields = ('id', 'status', 'duration', 'date', 'time')
