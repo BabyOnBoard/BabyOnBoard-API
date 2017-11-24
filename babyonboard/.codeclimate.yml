@@ -1,0 +1,6 @@
+languages:
+  Python: true
+
+exluded_paths:
+  - "**/migrations/**"
+  - "**/tests/**"
