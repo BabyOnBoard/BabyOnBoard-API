@@ -1,5 +1,6 @@
 import json
 import os
+from subprocess import call
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -122,7 +123,8 @@ def movement(request):
             serializer = BabyCribSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
-                os.system("./../scripts/movimento {} &".format(movement))
+                # os.system("./../scripts/movimento {}".format(movement))
+                call(['./../scripts/movimento', str(movement)])
                 return Response(data=None, status=status.HTTP_200_OK)
         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
         # data = {
@@ -161,7 +163,7 @@ def noise(request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def get_movement_name(id):
     if id == 1:
