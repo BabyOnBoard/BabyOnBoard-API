@@ -6,7 +6,7 @@ class Temperature(models.Model):
     Temperature Model
     Defines the atributes of a temperature registry obtained from sensor
     """
-    temperature = models.DecimalField(max_digits=3, decimal_places=1)
+    temperature = models.DecimalField(max_digits=4, decimal_places=2)
     date = models.DateField(auto_now=True, auto_now_add=False)
     time = models.TimeField(auto_now=True, auto_now_add=False)
 
