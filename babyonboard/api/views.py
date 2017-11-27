@@ -124,7 +124,8 @@ def movement(request):
             if serializer.is_valid():
                 serializer.save()
                 script_path = os.path.abspath(__file__ + '/../scripts/movimento')
-                Popen([script_path, str(movement)])
+                movement_id = get_id(movement)
+                Popen([script_path, str(movement_id)])
                 return Response(data=None, status=status.HTTP_200_OK)
         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
 
@@ -154,3 +155,13 @@ def noise(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+def get_id(movement):
+    if movement == 'side':
+        return 1
+    elif movement == 'front':
+        return 2
+    elif movement == 'vibration':
+        return 3
+    else:
+        return 0
