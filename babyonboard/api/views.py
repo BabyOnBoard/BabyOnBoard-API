@@ -114,11 +114,11 @@ def movement(request):
         serializer = BabyCribSerializer(babycrib)
         return Response(serializer.data)
     if request.method == 'POST':
-        movement = request.data.get('movimento')
-        if movement == 1 or movement == 2 or movement == 3:
+        movement = request.data.get('status')
+        if (movement.lower(), movement.title()) in BabyCrib.MOVEMENT_CHOICES:
             data = {
-                'status': get_movement_name(movement),
-                'duration': 0
+                'status': movement,
+                'duration': request.data.get('duration')
             }
             serializer = BabyCribSerializer(data=data)
             if serializer.is_valid():
@@ -147,18 +147,10 @@ def noise(request):
         return Response(serializer.data)
     if request.method == 'POST':
         data = {
-            'is_crying': request.data.get('status')
+            'is_crying': request.data.get('is_crying')
         }
         serializer = NoiseSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-def get_movement_name(id):
-    if id == 1:
-        return 'side'
-    elif id == 2:
-        return 'front'
-    elif id == 3:
-        return 'vibration'
