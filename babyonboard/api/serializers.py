@@ -17,7 +17,7 @@ class HeartBeatsSerializer(serializers.ModelSerializer):
 class BreathingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Breathing
-        fields = ('id', 'is_breathing', 'date', 'time')
+        fields = ('__all__')
 
 
 class BabyCribSerializer(serializers.ModelSerializer):

@@ -32,13 +32,13 @@ class BreathingTest(TestCase):
     """Test class for breathing model"""
 
     def setUp(self):
-        Breathing.objects.create(is_breathing=True)
+        Breathing.objects.create(status='no_breathing')
 
     def test_create_breathing(self):
-        breathing = Breathing.objects.get(is_breathing=True)
+        breathing = Breathing.objects.get(status='no_breathing')
         self.assertIsNotNone(breathing)
         self.assertTrue(isinstance(breathing, Breathing))
-        self.assertEqual(breathing.__str__(), str(breathing.is_breathing))
+        self.assertEqual(breathing.__str__(), str(breathing.status))
 
 
 class BabyCribTest(TestCase):

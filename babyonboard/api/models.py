@@ -32,12 +32,27 @@ class Breathing(models.Model):
     Breathing Model
     Defines the atributes of a breathing registry obtained from sensor
     """
-    is_breathing = models.BooleanField()
+    ABSENT = 'absent'
+    BREATHING = 'breathing'
+    NO_BREATHING = 'no_breathing'
+
+    BREATHING_CHOICES = (
+        (ABSENT, 'Absent'),
+        (BREATHING, 'Breathing'),
+        (NO_BREATHING, 'No Breathing'),
+    )
+
+    status = models.CharField(
+        max_length=15,
+        choices=BREATHING_CHOICES,
+        default=ABSENT
+    )
+
     date = models.DateField(auto_now=True, auto_now_add=False)
     time = models.TimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return str(self.is_breathing)
+        return str(self.status)
 
 
 class BabyCrib(models.Model):

@@ -98,7 +98,7 @@ class GetCurrentBreathingTest(TestCase):
     """ Test class for GET current breathing from API """
 
     def setUp(self):
-        Breathing.objects.create(is_breathing=True)
+        Breathing.objects.create(status=1)
 
     def test_get_current_breathing(self):
         response = client.get(reverse('breathing'))
@@ -113,10 +113,10 @@ class CreateNewBreathingTest(TestCase):
 
     def setUp(self):
         self.valid_payload = {
-            'is_breathing': True
+            'status': 'breathing'
         }
         self.invalid_payload = {
-            'is_breathing': ''
+            'status': 'crying'
         }
 
     def test_create_valid_breathing(self):

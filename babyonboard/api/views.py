@@ -83,7 +83,7 @@ def breathing(request):
         return Response(serializer.data)
     if request.method == 'POST':
         data = {
-            'is_breathing': request.data.get('is_breathing')
+            'status': request.data.get('status')
         }
         serializer = BreathingSerializer(data=data)
         if serializer.is_valid():
