@@ -7,8 +7,7 @@ class Temperature(models.Model):
     Defines the atributes of a temperature registry obtained from sensor
     """
     temperature = models.DecimalField(max_digits=4, decimal_places=2)
-    date = models.DateField(auto_now=True, auto_now_add=False)
-    time = models.TimeField(auto_now=True, auto_now_add=False)
+    datetime = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return str(self.temperature)
@@ -20,8 +19,7 @@ class HeartBeats(models.Model):
     Defines the atributes of a heartbeats registry obtained from sensor
     """
     beats = models.PositiveIntegerField()
-    date = models.DateField(auto_now=True, auto_now_add=False)
-    time = models.TimeField(auto_now=True, auto_now_add=False)
+    datetime = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return str(self.beats)
@@ -48,8 +46,7 @@ class Breathing(models.Model):
         default=ABSENT
     )
 
-    date = models.DateField(auto_now=True, auto_now_add=False)
-    time = models.TimeField(auto_now=True, auto_now_add=False)
+    datetime = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return str(self.status)
@@ -79,8 +76,7 @@ class BabyCrib(models.Model):
     )
 
     duration = models.PositiveIntegerField()
-    date = models.DateField(auto_now=True, auto_now_add=False)
-    time = models.TimeField(auto_now=True, auto_now_add=False)
+    datetime = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return str(self.status)
@@ -92,8 +88,7 @@ class Noise(models.Model):
     Defines if the baby is crying or not
     """
     is_crying = models.BooleanField()
-    date = models.DateField(auto_now=True, auto_now_add=False)
-    time = models.TimeField(auto_now=True, auto_now_add=False)
+    datetime = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return str(self.is_crying)
