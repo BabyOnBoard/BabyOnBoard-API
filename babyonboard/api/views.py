@@ -10,7 +10,7 @@ from .utils import runCScript
 from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer, NoiseSerializer
 
 
-# Temperature endpoints
+# Temperature endpoint
 @api_view(['GET', 'POST'])
 def temperature(request):
     if request.method == 'GET':
@@ -27,22 +27,8 @@ def temperature(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def temperature_year_archive(request, year):
-    temperatures = Temperature.objects.filter(date__year=year)
-    serializer = TemperatureSerializer(temperatures, many=True)
-    return JsonResponse(serializer.data, safe=False)
 
-def temperature_month_archive(request, year, month):
-    temperatures = Temperature.objects.filter(date__year=year, date__month=month)
-    serializer = TemperatureSerializer(temperatures, many=True)
-    return JsonResponse(serializer.data, safe=False)
-
-def temperature_day_archive(request, year, month, day):
-    temperatures = Temperature.objects.filter(date__year=year, date__month=month, date__day=day)
-    serializer = TemperatureSerializer(temperatures, many=True)
-    return JsonResponse(serializer.data, safe=False)
-
-# Heartbeats endpoints
+# Heartbeats endpoint
 @api_view(['GET', 'POST'])
 def heartbeats(request):
     if request.method == 'GET':
@@ -59,22 +45,8 @@ def heartbeats(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def heartbeats_year_archive(request, year):
-    heartbeats = HeartBeats.objects.filter(date__year=year)
-    serializer = HeartBeatsSerializer(heartbeats, many=True)
-    return JsonResponse(serializer.data, safe=False)
 
-def heartbeats_month_archive(request, year, month):
-    heartbeats = HeartBeats.objects.filter(date__year=year, date__month=month)
-    serializer = HeartBeatsSerializer(heartbeats, many=True)
-    return JsonResponse(serializer.data, safe=False)
-
-def heartbeats_day_archive(request, year, month, day):
-    heartbeats = HeartBeats.objects.filter(date__year=year, date__month=month, date__day=day)
-    serializer = HeartBeatsSerializer(heartbeats, many=True)
-    return JsonResponse(serializer.data, safe=False)
-
-# Breathing endpoints
+# Breathing endpoint
 @api_view(['GET', 'POST'])
 def breathing(request):
     if request.method == 'GET':
@@ -91,22 +63,8 @@ def breathing(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def breathing_year_archive(request, year):
-    breathings = Breathing.objects.filter(date__year=year)
-    serializer = BreathingSerializer(breathings, many=True)
-    return JsonResponse(serializer.data, safe=False)
 
-def breathing_month_archive(request, year, month):
-    breathings = Breathing.objects.filter(date__year=year, date__month=month)
-    serializer = BreathingSerializer(breathings, many=True)
-    return JsonResponse(serializer.data, safe=False)
-
-def breathing_day_archive(request, year, month, day):
-    breathings = Breathing.objects.filter(date__year=year, date__month=month, date__day=day)
-    serializer = BreathingSerializer(breathings, many=True)
-    return JsonResponse(serializer.data, safe=False)
-
-# Movement endpoints
+# Movement endpoint
 @api_view(['GET', 'POST'])
 def movement(request):
     if request.method == 'GET':
@@ -129,6 +87,7 @@ def movement(request):
                 return Response(data=None, status=status.HTTP_200_OK)
         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
 
+
 # Streaming endpoint
 @api_view(['POST'])
 def streaming(request):
@@ -138,6 +97,7 @@ def streaming(request):
         os.system("python {} {}".format(script_path, action))
         return Response(data=None, status=status.HTTP_200_OK)
     return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
+
 
 # Noise endpoint
 @api_view(['GET', 'POST'])
@@ -155,6 +115,7 @@ def noise(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 def get_id(movement):
     if movement == 'side':
