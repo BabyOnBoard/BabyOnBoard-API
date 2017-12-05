@@ -82,6 +82,19 @@ class BabyCrib(models.Model):
         return str(self.status)
 
 
+class Movement(models.Model):
+    """
+    Movement Model
+    Defines if the baby crib is moving, and the remaining time
+    """
+    is_moving = models.BooleanField()
+    remaining_time = models.IntegerField()
+    movement = models.CharField(max_length=10, default='resting')
+
+    def __str__(self):
+        return str(self.is_moving)
+
+
 class Noise(models.Model):
     """
     Noise Model
