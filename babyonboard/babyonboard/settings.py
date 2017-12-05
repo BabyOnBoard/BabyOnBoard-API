@@ -42,6 +42,7 @@ DEFAULT_APPS = [
 ]
 
 THIRD_PART_APPS = [
+    'corsheaders',
     'rest_framework',
 ]
 
@@ -56,6 +57,8 @@ LOCAL_APPS = [
 INSTALLED_APPS = LOCAL_APPS + THIRD_PART_APPS + DEFAULT_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,6 +69,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'babyonboard.urls'
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
