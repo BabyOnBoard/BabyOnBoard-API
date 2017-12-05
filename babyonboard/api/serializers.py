@@ -5,13 +5,13 @@ from .models import Temperature, HeartBeats, Breathing, BabyCrib, Noise
 class TemperatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Temperature
-        fields = ('id', 'temperature', 'date', 'time')
+        fields = ('__all__')
 
 
 class HeartBeatsSerializer(serializers.ModelSerializer):
     class Meta:
         model = HeartBeats
-        fields = ('id', 'beats', 'date', 'time')
+        fields = ('__all__')
 
 
 class BreathingSerializer(serializers.ModelSerializer):
@@ -23,10 +23,10 @@ class BreathingSerializer(serializers.ModelSerializer):
 class BabyCribSerializer(serializers.ModelSerializer):
     class Meta:
         model = BabyCrib
-        fields = ('id', 'status', 'duration', 'date', 'time')
+        fields = ('__all__')
 
 
 class NoiseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Noise
-        fields = ('id', 'is_crying', 'date', 'time')
+        fields = ('__all__')

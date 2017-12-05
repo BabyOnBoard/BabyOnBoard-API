@@ -14,7 +14,7 @@ from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingS
 @api_view(['GET', 'POST'])
 def temperature(request):
     if request.method == 'GET':
-        temperature = Temperature.objects.order_by('date', 'time').last()
+        temperature = Temperature.objects.order_by('datetime').last()
         serializer = TemperatureSerializer(temperature)
         return Response(serializer.data)
     if request.method == 'POST':
@@ -46,7 +46,7 @@ def temperature_day_archive(request, year, month, day):
 @api_view(['GET', 'POST'])
 def heartbeats(request):
     if request.method == 'GET':
-        heartbeats = HeartBeats.objects.order_by('date', 'time').last()
+        heartbeats = HeartBeats.objects.order_by('datetime').last()
         serializer = HeartBeatsSerializer(heartbeats)
         return Response(serializer.data)
     if request.method == 'POST':
@@ -78,7 +78,7 @@ def heartbeats_day_archive(request, year, month, day):
 @api_view(['GET', 'POST'])
 def breathing(request):
     if request.method == 'GET':
-        breathing = Breathing.objects.order_by('date', 'time').last()
+        breathing = Breathing.objects.order_by('datetime').last()
         serializer = BreathingSerializer(breathing)
         return Response(serializer.data)
     if request.method == 'POST':
@@ -110,7 +110,7 @@ def breathing_day_archive(request, year, month, day):
 @api_view(['GET', 'POST'])
 def movement(request):
     if request.method == 'GET':
-        babycrib = BabyCrib.objects.order_by('date', 'time').last()
+        babycrib = BabyCrib.objects.order_by('datetime').last()
         serializer = BabyCribSerializer(babycrib)
         return Response(serializer.data)
     if request.method == 'POST':
@@ -143,7 +143,7 @@ def streaming(request):
 @api_view(['GET', 'POST'])
 def noise(request):
     if request.method == 'GET':
-        noise = Noise.objects.order_by('date', 'time').last()
+        noise = Noise.objects.order_by('datetime').last()
         serializer = NoiseSerializer(noise)
         return Response(serializer.data)
     if request.method == 'POST':
