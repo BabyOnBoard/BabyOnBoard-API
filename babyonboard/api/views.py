@@ -99,7 +99,7 @@ def movement(request):
             if serializer.is_valid():
 #                script_path = os.path.abspath(__file__ + '/../scripts/movimento')
                 movement_id = get_id(movement)
-                Popen(['./home/pi/Git/BabyOnBoard-Sensores/motor', str(movement_id), str(duration)])
+                Popen(['/home/pi/Git/BabyOnBoard-Sensores/motor', str(movement_id), str(data['duration'])])
                 serializer.save()
                 return Response(data=None, status=status.HTTP_201_CREATED)
         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
