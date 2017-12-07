@@ -2,6 +2,7 @@ import json
 import os
 import datetime
 import pytz
+from random import *
 from subprocess import Popen
 from django.http import HttpResponse, JsonResponse
 from django.utils.dateparse import parse_datetime
@@ -35,7 +36,7 @@ def temperature(request):
 @api_view(['GET', 'POST'])
 def heartbeats(request):
     if request.method == 'GET':
-        heartbeats = HeartBeats.objects.order_by('datetime').last()
+        heartbeats = HeartBeats(beats=randint(50, 110))
         serializer = HeartBeatsSerializer(heartbeats)
         return Response(serializer.data)
     if request.method == 'POST':
@@ -99,7 +100,7 @@ def movement(request):
                 serializer.save()
                 script_path = os.path.abspath(__file__ + '/../scripts/movimento')
                 movement_id = get_id(movement)
-                Popen([script_path, str(movement_id)])
+                Popen(['sudo ./home/pi/Git/BabyOnBoard-Sensores/motor', str(movement_id), str(duration)])
                 return Response(data=None, status=status.HTTP_201_CREATED)
         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
 
