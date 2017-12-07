@@ -97,10 +97,10 @@ def movement(request):
             }
             serializer = BabyCribSerializer(data=data)
             if serializer.is_valid():
-                serializer.save()
-                script_path = os.path.abspath(__file__ + '/../scripts/movimento')
+#                script_path = os.path.abspath(__file__ + '/../scripts/movimento')
                 movement_id = get_id(movement)
-                Popen(['sudo ./home/pi/Git/BabyOnBoard-Sensores/motor', str(movement_id), str(duration)])
+                Popen(['./home/pi/Git/BabyOnBoard-Sensores/motor', str(movement_id), str(duration)])
+                serializer.save()
                 return Response(data=None, status=status.HTTP_201_CREATED)
         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
 
