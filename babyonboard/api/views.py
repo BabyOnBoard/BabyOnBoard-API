@@ -41,7 +41,7 @@ def heartbeats(request):
         return Response(serializer.data)
     if request.method == 'POST':
         data = {
-            'beats': request.data.get('beats')
+            'beats':int(request.data.get('beats').rstrip())
         }
         serializer = HeartBeatsSerializer(data=data)
         if serializer.is_valid():
