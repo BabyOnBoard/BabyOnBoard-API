@@ -135,9 +135,9 @@ def noise(request):
 
 
 def get_id(movement):
-    if movement == 'side':
+    if movement == 'front':
         return 1
-    elif movement == 'front':
+    elif movement == 'side':
         return 2
     elif movement == 'vibration':
         return 3
