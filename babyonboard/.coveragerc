@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = api, babyonboard
+omit =
+    */__init__.py,
+    */__pycache__/*,
+    */migrations/*,
