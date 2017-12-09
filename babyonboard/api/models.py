@@ -94,6 +94,16 @@ class Movement(models.Model):
     def __str__(self):
         return str(self.is_moving)
 
+    def get_movement_id(movement):
+        if movement == 'front':
+            return 1
+        elif movement == 'side':
+            return 2
+        elif movement == 'vibration':
+            return 3
+        else:
+            return 0
+
 
 class Noise(models.Model):
     """

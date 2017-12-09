@@ -1,11 +1,7 @@
-import json
 import os
 import datetime
 import pytz
-from random import *
 from subprocess import Popen
-from django.http import HttpResponse, JsonResponse
-from django.utils.dateparse import parse_datetime
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -36,12 +32,12 @@ def temperature(request):
 @api_view(['GET', 'POST'])
 def heartbeats(request):
     if request.method == 'GET':
-        heartbeats = HeartBeats(beats=randint(50, 110))
+        heartbeats = HeartBeats.objects.order_by('datetime').last()
         serializer = HeartBeatsSerializer(heartbeats)
         return Response(serializer.data)
     if request.method == 'POST':
         data = {
-            'beats':int(request.data.get('beats').rstrip())
+            'beats': int(request.data.get('beats').rstrip())
         }
         serializer = HeartBeatsSerializer(data=data)
         if serializer.is_valid():
@@ -98,7 +94,7 @@ def movement(request):
             serializer = BabyCribSerializer(data=data)
             if serializer.is_valid():
 #                script_path = os.path.abspath(__file__ + '/../scripts/movimento')
-                movement_id = get_id(movement)
+                movement_id = Movement.get_movement_id(movement)
                 Popen(['/home/pi/Git/BabyOnBoard-Sensores/motor', str(movement_id), str(data['duration'])])
                 serializer.save()
                 return Response(data=None, status=status.HTTP_201_CREATED)
@@ -132,38 +128,3 @@ def noise(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-def get_id(movement):
-    if movement == 'front':
-        return 1
-    elif movement == 'side':
-        return 2
-    elif movement == 'vibration':
-        return 3
-    else:
-        return 0
-
-
-@api_view(['GET'])
-def is_moving(request):
-    now = datetime.datetime.now()
-    now = pytz.utc.localize(now).timestamp()
-    movement = BabyCrib.objects.order_by('datetime').last()
-    if movement is None:
-        return Response(data=None, status=status.HTTP_200_OK)
-    time_difference = now - movement.datetime.timestamp()
-    if time_difference > movement.duration * 60:
-        data = {
-            'movement': 'resting',
-            'is_moving': False,
-            'time_remaining': 0
-        }
-        return Response(data=data, status=status.HTTP_200_OK)
-    time_remaining = time_difference - (movement.duration * 60)
-    data = {
-        ''
-        'is_moving': True,
-        'time_remaining': time_remaining
-    }
-    return Response(data=data, status=status.HTTP_200_OK)
