@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..models import Temperature, HeartBeats, Breathing, BabyCrib
+from ..models import Temperature, HeartBeats, Breathing, BabyCrib, Movement, Noise
 
 
 class TemperatureTest(TestCase):
@@ -52,3 +52,42 @@ class BabyCribTest(TestCase):
         self.assertIsNotNone(babycrib)
         self.assertTrue(isinstance(babycrib, BabyCrib))
         self.assertEqual(babycrib.__str__(), str(babycrib.status))
+
+
+class MovementTest(TestCase):
+    """Test class for movement model"""
+
+    def setUp(self):
+        Movement.objects.create(is_moving=True, remaining_time=30, movement='front')
+        Movement.objects.create(is_moving=True, remaining_time=50, movement='side')
+        Movement.objects.create(is_moving=True, remaining_time=60, movement='vibration')
+        Movement.objects.create(is_moving=False, remaining_time=0, movement='resting')
+
+    def test_create_movement(self):
+        movement = Movement.objects.get(movement='front')
+        self.assertIsNotNone(movement)
+        self.assertTrue(isinstance(movement, Movement))
+        self.assertEqual(movement.__str__(), str(movement.is_moving))
+
+    def test_get_movement_id(self):
+        front_movement = Movement.objects.get(movement='front')
+        side_movement = Movement.objects.get(movement='side')
+        vibration_movement = Movement.objects.get(movement='vibration')
+        resting_movement = Movement.objects.get(movement='resting')
+        self.assertEqual(1, Movement.get_movement_id(front_movement.movement))
+        self.assertEqual(2, Movement.get_movement_id(side_movement.movement))
+        self.assertEqual(3, Movement.get_movement_id(vibration_movement.movement))
+        self.assertEqual(0, Movement.get_movement_id(resting_movement.movement))
+
+
+class NoiseTest(TestCase):
+    """Test class for noise model"""
+
+    def setUp(self):
+        Noise.objects.create(is_crying=False)
+
+    def test_create_noise(self):
+        noise = Noise.objects.get(is_crying=False)
+        self.assertIsNotNone(noise)
+        self.assertTrue(isinstance(noise, Noise))
+        self.assertEqual(noise.__str__(), str(noise.is_crying))

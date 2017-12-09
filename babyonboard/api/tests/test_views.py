@@ -2,8 +2,8 @@ import json
 from rest_framework import status
 from django.test import TestCase, Client
 from django.urls import reverse
-from ..models import Temperature, HeartBeats, Breathing, BabyCrib
-from ..serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer
+from ..models import Temperature, HeartBeats, Breathing, BabyCrib, Movement, Noise
+from ..serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer, MovementSerializer, NoiseSerializer
 
 
 client = Client()
@@ -168,7 +168,7 @@ class GetBabyCribStatusTest(TestCase):
     """ Test class to check babycrib status """
 
     def setUp(self):
-        BabyCrib.objects.create(status='resting', duration=0)
+        BabyCrib.objects.create(status='vibration', duration=100)
 
     def test_get_babycrib_status(self):
         response = client.get(reverse('movement'))
@@ -177,8 +177,20 @@ class GetBabyCribStatusTest(TestCase):
         self.assertEqual(response.data['movement'], serializer.data['status'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_still_moving_registry(self):
+        response = client.get(reverse('movement'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['is_moving'], True)
+        self.assertTrue(response.data['remaining_time'] > 0)
 
-class ControlBabyCribMovement(TestCase):
+    def test_get_empty_babycrib_registry(self):
+        BabyCrib.objects.all().delete()
+        response = client.get(reverse('movement'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['is_moving'], False)   
+
+
+class ControlBabyCribMovementTest(TestCase):
     """ Test class for controling babycrib movementation """
 
     def setUp(self):
@@ -191,18 +203,51 @@ class ControlBabyCribMovement(TestCase):
             'duration': 100
         }
 
-# Not able to test this method now
-#    def test_set_movement(self):
-#        response = client.post(
-#            reverse('movement'),
-#            data=json.dumps(self.valid_payload),
-#            content_type='application/json'
-#        )
-#        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
     def test_set_invalid_movement(self):
         response = client.post(
             reverse('movement'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class GetCurrentNoiseStatusTest(TestCase):
+    """ Test class for GET current crying status from API """
+
+    def setUp(self):
+        Noise.objects.create(is_crying=True)
+
+    def test_get_movement_status(self):
+        response = client.get(reverse('noise'))
+        noise = Noise.objects.order_by('datetime').last()
+        serializer = NoiseSerializer(noise)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CreateNewNoiseTest(TestCase):
+    """" Test class for saving a new noise registry """
+
+    def setUp(self):
+        self.valid_payload = {
+            'is_crying': True
+        }
+        self.invalid_payload = {
+            'is_crying': 'crying'
+        }
+
+    def test_create_valid_noise(self):
+        response = client.post(
+            reverse('noise'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_invalid_noise(self):
+        response = client.post(
+            reverse('noise'),
             data=json.dumps(self.invalid_payload),
             content_type='application/json'
         )
