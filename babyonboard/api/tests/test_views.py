@@ -85,7 +85,7 @@ class CreateNewHeartBeatsTest(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_create_invalid_temperature(self):
+    def test_create_invalid_heartbeats(self):
         response = client.post(
             reverse('heartbeats'),
             data=json.dumps(self.invalid_payload),
@@ -174,7 +174,7 @@ class GetBabyCribStatusTest(TestCase):
         response = client.get(reverse('movement'))
         babycrib = BabyCrib.objects.order_by('datetime').last()
         serializer = BabyCribSerializer(babycrib)
-        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data['movement'], serializer.data['status'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
