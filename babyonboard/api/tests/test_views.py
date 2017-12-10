@@ -211,6 +211,14 @@ class ControlBabyCribMovementTest(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_raise_file_not_found(self):
+        response = client.post(
+            reverse('movement'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class GetCurrentNoiseStatusTest(TestCase):
     """ Test class for GET current crying status from API """
