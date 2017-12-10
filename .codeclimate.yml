@@ -2,5 +2,9 @@ languages:
   Python: true
 
 exluded_paths:
-  - "**/migrations/**"
-  - "**/tests/**"
+  - "**/migrations/*"
+  - "**/tests/*"
+
+checks:
+  similar-code:
+    enabled: false
