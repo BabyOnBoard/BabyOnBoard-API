@@ -6,7 +6,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Temperature, HeartBeats, Breathing, BabyCrib, Noise, Movement
-from .utils import runCScript
 from .serializers import TemperatureSerializer, HeartBeatsSerializer, BreathingSerializer, BabyCribSerializer, NoiseSerializer, MovementSerializer
 
 
@@ -95,9 +94,13 @@ def movement(request):
             if serializer.is_valid():
 #                script_path = os.path.abspath(__file__ + '/../scripts/movimento')
                 movement_id = Movement.get_movement_id(movement)
-                Popen(['/home/pi/Git/BabyOnBoard-Sensores/motor', str(movement_id), str(data['duration'])])
-                serializer.save()
-                return Response(data=None, status=status.HTTP_201_CREATED)
+                try:
+                    Popen(['/home/pi/Git/BabyOnBoard-Sensores/motor', str(movement_id), str(data['duration'])])
+                except FileNotFoundError:
+                    return Response(data={'error': 'No such file or directory'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    serializer.save()
+                    return Response(data=None, status=status.HTTP_201_CREATED)
         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
 
 
