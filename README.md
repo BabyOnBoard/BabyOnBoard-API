@@ -1,8 +1,28 @@
-# BabyOnBoard-API
+<h1 align="center">
+    <br>
+        <a href="https://github.com/BabyOnBoard">
+            <img src="https://avatars3.githubusercontent.com/u/31625888" alt="Baby on Board" width="200"></a>
+    <br>
+    Baby on Board - API
+    <br>
+</h1>
 
-[![Build Status](https://travis-ci.org/BabyOnBoard/BabyOnBoard-API.svg?branch=master)](https://travis-ci.org/BabyOnBoard/BabyOnBoard-API)
-[![Coverage Status](https://coveralls.io/repos/github/BabyOnBoard/BabyOnBoard-API/badge.svg?branch=master)](https://coveralls.io/github/BabyOnBoard/BabyOnBoard-API?branch=master)
-[![Code Climate](https://codeclimate.com/github/BabyOnBoard/BabyOnBoard-API/badges/gpa.svg)](https://codeclimate.com/github/BabyOnBoard/BabyOnBoard-API)
+<p align="center">
+    <a href="https://travis-ci.org/BabyOnBoard/BabyOnBoard-API">
+        <img src="https://travis-ci.org/BabyOnBoard/BabyOnBoard-API.svg?branch=master" alt="Build Status">
+    </a>
+    <a href="https://coveralls.io/github/BabyOnBoard/BabyOnBoard-API?branch=master">
+        <img src="https://coveralls.io/repos/github/BabyOnBoard/BabyOnBoard-API/badge.svg?branch=master" alt="Coverage Status">
+    </a>
+    <a href="https://codeclimate.com/github/BabyOnBoard/BabyOnBoard-API">
+        <img src="https://codeclimate.com/github/BabyOnBoard/BabyOnBoard-API/badges/gpa.svg" alt="Code Climate GPA">
+    </a>
+    <a href="https://opensource.org/licenses/MIT">
+        <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
+    </a>
+</p>
+
+----
 
 ## API to clients comunication
 
